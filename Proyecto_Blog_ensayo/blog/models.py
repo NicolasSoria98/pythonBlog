@@ -8,6 +8,7 @@ class BlogPost(models.Model):
     is_featured = models.BooleanField(default=False)
     is_archived = models.BooleanField(default=False)
     views_count = models.IntegerField(default=0)
+    is_private = models.BooleanField(default=False)
     
     # Nuevo campo para autor (relación con User)
     author = models.ForeignKey(
