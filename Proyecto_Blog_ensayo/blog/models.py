@@ -5,13 +5,16 @@ class BlogPost(models.Model):
     content = models.TextField()
     published_date = models.DateTimeField(auto_now_add=True)
     is_published = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
+    is_archived = models.BooleanField(default=False)
+    views_count = models.IntegerField(default=0)
     
     # Nuevo campo para autor (relación con User)
     author = models.ForeignKey(
         'auth.User',
         on_delete=models.CASCADE,
         null=True,    # Permite NULL en la BD
-        blank=True    # Permite vacío en el admin
+        blank=True,    # Permite vacío en el admin
     )
 
     def __str__(self):

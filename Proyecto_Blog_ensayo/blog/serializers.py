@@ -24,8 +24,24 @@ class BlogPostSerializer(serializers.ModelSerializer):
     def validate_content(self, value):
         if len(value.strip()) < 20:
             raise serializers.ValidationError("El contenido debe tener al menos 20 caracteres.")
-        return value        
+        return value   
+    def validate_is_featured(self, value):
+        # Si están intentando marcar como destacado
+        if value:
+            # Contar cuántos posts ya están destacados
+            featured_count = BlogPost.objects.filter(is_featured=True).count()
+            
+            # Si estamos editando un post que ya estaba destacado, no contarlo
+            if self.instance and self.instance.is_featured:
+                featured_count -= 1
+            
+            # Validar que no haya más de 5 destacados
+            if featured_count >= 5:
+                raise serializers.ValidationError("Ya hay 5 posts destacados. No se pueden destacar más.")
+        
+        return value     
     class Meta:
         model = BlogPost
-        fields = ['id', 'title', 'content', 'published_date','is_published', 'author', 'comments']
+        fields = ['id', 'title', 'content', 'published_date','is_published', 'is_featured', 'is_archived', 'author', 'comments', 'views_count']
+
         
